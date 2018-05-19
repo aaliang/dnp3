@@ -1,16 +1,15 @@
-FROM centos:7
 
-RUN yum install -y bash \
-  boost-devel \
-  git \
-  centos-release-scl
+FROM debian:stretch as base
 
-# dnp3 requires g++ 4.9+. centos/rhel's default yum repo conveniently only installs 4.8
-# have to use devtoolset-4 for a more modern version
-RUN yum install -y devtoolset-4-gcc-*
-RUN yum install -y make cmake autoconf
-ENV PATH="/opt/rh/devtoolset-4/root/bin/:${PATH}"
+RUN apt-get update && apt-get install -y libboost-all-dev \
+    git \
+    build-essential \
+    cmake \
+    autoconf
 
 RUN git clone --recursive https://github.com/automatak/dnp3.git
-WORKDIR ./dnp3
-RUN cmake . && make -j && make install
+WORKDIR /dnp3
+RUN git reset --hard f2eaaad736f8469b01916de01ee44fadf80fa1d5 \
+ && cmake . \
+ && make -j \
+ && make install
