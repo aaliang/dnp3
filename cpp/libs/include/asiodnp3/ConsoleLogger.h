@@ -48,6 +48,8 @@ public:
 	};
 
 	ConsoleLogger(bool printLocation) : printLocation(printLocation) {}
+	
+	~ConsoleLogger(){}
 
 private:
 
